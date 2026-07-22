@@ -28,7 +28,6 @@ Your SKILL.md should be a working file that could be placed in `.claude/skills/a
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-fork-skill.md`.
 Key things to check:
 - [ ] You included `context: fork` in frontmatter (isolation requirement)
 - [ ] You specified `agent: Explore` or equivalent read-only agent

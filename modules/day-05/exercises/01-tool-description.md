@@ -30,7 +30,6 @@ Assume the tool:
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-tool-description.md`.
 Key things to check:
 - [ ] Your description is 3-4 sentences (not a single line, not a paragraph)
 - [ ] It specifies WHAT is returned (profile fields)

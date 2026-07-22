@@ -19,7 +19,6 @@ The exam question reads:
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-batch-vs-sync.md`.
 Key things to check:
 - [ ] You correctly identified overnight reports as a GOOD batch candidate
 - [ ] You correctly identified pre-merge checks as a BAD batch candidate

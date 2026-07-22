@@ -23,7 +23,6 @@ The exam question reads:
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-hanging-pipeline.md`.
 Key things to check:
 - [ ] You identified the missing `-p` flag as the root cause
 - [ ] Your corrected command includes `-p`

@@ -32,7 +32,6 @@ Answer these questions:
 
 ## When You're Done
 
-Compare your answer against `../solutions/claude_config.md`.
 Key things to check:
 - [ ] Root CLAUDE.md contains only team-wide conventions (not domain-specific)
 - [ ] Domain rules use `paths` frontmatter for conditional activation

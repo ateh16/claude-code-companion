@@ -33,7 +33,6 @@ return "Max iterations reached"
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-anti-pattern.md`.
 Key things to check:
 - [ ] You identified the correct anti-pattern (there's one primary culprit)
 - [ ] You explained the MECHANISM, not just named the pattern

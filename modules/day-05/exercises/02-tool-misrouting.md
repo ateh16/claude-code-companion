@@ -19,7 +19,6 @@ The team proposes two fixes:
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-tool-misrouting.md`.
 Key things to check:
 - [ ] You explained that descriptions ARE the selection mechanism (injected into system prompt)
 - [ ] You explained why fixing descriptions addresses the root cause

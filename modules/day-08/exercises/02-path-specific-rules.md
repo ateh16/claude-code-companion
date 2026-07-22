@@ -23,7 +23,6 @@ Select the best answer and explain WHY each option is correct or incorrect. For 
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-path-specific-rules.md`.
 Key things to check:
 - [ ] You selected the correct answer
 - [ ] You explained the conditional activation mechanism (paths frontmatter)

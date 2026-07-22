@@ -26,7 +26,6 @@ For each task below, classify it as **Plan Mode** or **Direct Execution**. Provi
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-classify-tasks.md`.
 Key things to check:
 - [ ] You correctly identified the 3+ file threshold for Plan Mode
 - [ ] You classified single-file, well-defined tasks as Direct Execution

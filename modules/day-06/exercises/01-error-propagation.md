@@ -42,7 +42,6 @@ Raise an exception that propagates to the coordinator, which restarts the resear
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-error-propagation.md`.
 Key things to check:
 - [ ] You explained why structured context enables intelligent recovery
 - [ ] You identified B's failure mode (loss of diagnostic information)

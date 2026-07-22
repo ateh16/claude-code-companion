@@ -30,7 +30,6 @@ Select the best answer and explain WHY each option is correct or incorrect. For 
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-review-command.md`.
 Key things to check:
 - [ ] You selected the correct answer
 - [ ] You explained the VCS sharing mechanism

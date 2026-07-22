@@ -25,7 +25,6 @@ Select the best answer. For each option, explain the specific mechanism by which
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-escalation-calibration.md`.
 Key things to check:
 - [ ] You selected the correct answer
 - [ ] You explained WHY the agent has inverted calibration (it doesn't know WHICH cases are easy)

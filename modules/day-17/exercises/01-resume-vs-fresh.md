@@ -62,7 +62,6 @@ You're implementing a feature that touches 12 files. Six are done and committed.
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-resume-vs-fresh.md`.
 Key things to check:
 - [ ] You applied the "2 failed corrections then /clear" rule correctly
 - [ ] You distinguished between active debugging (resume) and polluted context (fresh)

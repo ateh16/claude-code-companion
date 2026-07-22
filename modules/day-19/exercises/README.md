@@ -50,4 +50,4 @@ python exercises/hooks.py
 python exercises/coordinator.py
 ```
 
-When all pass, compare against `../solutions/` and read `../solutions/WALKTHROUGH.md` for the full domain mapping.
+Each file prints `All structural checks passed.` when its structure is correct. When all five pass, you've completed the Week 3 integration.

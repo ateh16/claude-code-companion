@@ -24,7 +24,6 @@ Configure a Stop hook (type: `prompt`) that evaluates whether the agent's output
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-stop-vs-prompt.md`.
 Key things to check:
 - [ ] You identified the deterministic vs probabilistic distinction
 - [ ] You described specific failure modes for the prompt approach (context pressure, conversation length)

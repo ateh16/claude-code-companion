@@ -26,7 +26,6 @@ This file contains helper functions for the bug fix approach A is trying.
 
 ## When You're Done
 
-Compare your answer against `../solutions/02-fork-session.md`.
 Key things to check:
 - [ ] You correctly identified what fork_session branches (conversation history) vs what it doesn't (filesystem)
 - [ ] You distinguished between "can see the file" and "knows who created it"

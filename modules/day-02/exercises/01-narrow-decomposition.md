@@ -28,7 +28,6 @@ The team considers these fixes:
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-narrow-decomposition.md`.
 Key things to check:
 - [ ] You identified task decomposition as the root cause, not agent capability
 - [ ] You explained WHY synthesis/search/doc agents can't fix a decomposition problem

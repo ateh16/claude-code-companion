@@ -15,7 +15,6 @@ A new team member, Priya, clones the repository and starts using Claude Code. Sh
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-team-member-problem.md`.
 Key things to check:
 - [ ] You identified which level of the hierarchy the conventions are currently stored at
 - [ ] You explained WHY existing members see the conventions but Priya does not

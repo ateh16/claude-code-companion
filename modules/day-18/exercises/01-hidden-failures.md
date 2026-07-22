@@ -20,7 +20,6 @@ Your manager is satisfied with this number and wants to push to production. But 
 
 ## When You're Done
 
-Compare your answer against `../solutions/01-hidden-failures.md`.
 Key things to check:
 - [ ] You identified stratification by input type as the first step
 - [ ] You mentioned field-level confidence analysis (not just document-level)
