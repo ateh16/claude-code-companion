@@ -101,12 +101,15 @@ def run(dry_run=False, force=False, broker=None, now=None, px=None):
     others = [s for s in holdings if s not in syms]
     if others:
         log.info("Leaving other positions untouched: %s", ", ".join(others))
-    log.info("Account equity $%s | holding: %s", f"{equity:,.2f}",
+    # Size the target on the money this bot manages (cash + its own funds), not on
+    # positions it leaves alone, so it never tries to spend what isn't free.
+    budget = max(0.0, equity - sum(holdings[s] for s in others))
+    log.info("Account equity $%s | ensemble budget $%s | holding: %s", f"{equity:,.2f}", f"{budget:,.2f}",
              ", ".join(f"{s} ${v:,.0f}" for s, v in holdings.items() if s in syms) or "nothing")
 
     fractional = conf.getboolean("trading", "fractional")
     held_qty = {s: broker.position_qty(s) for s in syms} if not fractional else None
-    orders = plan_trades(target, equity, holdings, px.iloc[-1],
+    orders = plan_trades(target, budget, holdings, px.iloc[-1],
                          conf.getfloat("trading", "min_trade_pct"), fractional, held_qty)
     if not orders:
         log.info("Account already matches the target. No trades.")

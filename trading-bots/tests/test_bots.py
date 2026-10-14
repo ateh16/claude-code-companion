@@ -17,6 +17,19 @@ NY = ZoneInfo("America/New_York")
 MORNING = datetime(2025, 6, 10, 9, 31, tzinfo=NY)   # a Tuesday, inside the run window
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _logs_to_temp(tmp_path_factory):
+    """Keep test runs out of the real logs/ files the bots write."""
+    import common.log
+    import ensemble.run
+    import ma_crossover.bot
+    real, log_dir = common.log.get_logger, tmp_path_factory.mktemp("logs")
+    with pytest.MonkeyPatch.context() as mp:
+        for mod in (ma_crossover.bot, ensemble.run):
+            mp.setattr(mod, "get_logger", lambda name, f: real(f"test-{name}", log_dir / f"{name}.log"))
+        yield
+
+
 # ------------------------------------------------------------------ helpers
 def synthetic_prices(start="2000-01-03", end="2025-06-09", seed=7) -> pd.DataFrame:
     """Four fake funds with bull runs, crashes and recoveries."""
@@ -206,6 +219,19 @@ def test_live_run_trades_against_account(px, conf, monkeypatch):
     again = len(b.orders)
     er.run(broker=b, now=MORNING, px=px)                                  # second run same day
     assert len(b.orders) == again
+
+
+def test_live_run_only_spends_its_own_budget(px, conf, monkeypatch):
+    """$100k account with $70k in AAPL: the ensemble may only use the other $30k."""
+    import ensemble.run as er
+    monkeypatch.setattr(er, "load_conf", lambda p: conf)
+    monkeypatch.setattr(er, "blend", lambda votes, c: pd.DataFrame(      # force a fully invested target
+        {"SPY": 0.5, "QQQ": 0.5, "EFA": 0.0, "IEF": 0.0}, index=px.index))
+    b = FakeBroker(equity=100_000, holdings={"AAPL": 70_000.0})
+    er.run(broker=b, now=MORNING, px=px)
+    bought = sum(o["notional"] for o in b.orders if o["side"] == "buy")
+    assert abs(bought - 30_000) < 1e-6
+    assert "AAPL" not in [o["symbol"] for o in b.orders] + b.closed
 
 
 # ------------------------------------------------------------------ Stock picker
