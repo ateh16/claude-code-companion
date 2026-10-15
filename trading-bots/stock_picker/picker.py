@@ -4,7 +4,9 @@
   2. Momentum: 12-month return (skipping the last month), 6-month return,
      price above its 50-day average and the 50-day above the 200-day.
   3. Fundamentals check on the strongest names (revenue and earnings growth).
-  4. Rank on momentum + growth and print the top 3 with a one-line thesis.
+  4. Rank on momentum + growth, marking down names that have run far above
+     their 200-day average, and print the top 3 (at most one per industry)
+     with a one-line thesis.
 
 This is a screen, not advice: it ranks what the numbers show today.
 
@@ -115,6 +117,21 @@ def thesis(r) -> str:
             f"and {r['vs_200d']:.0%} above the 200-day average.")
 
 
+def pick_diversified(ranked: pd.DataFrame, n: int, max_per_industry: int) -> pd.DataFrame:
+    """Best-scored names in order, skipping any whose industry is already full.
+    A name with no industry on file counts as its own industry."""
+    taken, rows = {}, []
+    for i, r in ranked.iterrows():
+        key = r.get("industry") or r["symbol"]
+        if taken.get(key, 0) >= max_per_industry:
+            continue
+        taken[key] = taken.get(key, 0) + 1
+        rows.append(i)
+        if len(rows) == n:
+            break
+    return ranked.loc[rows]
+
+
 def pick(conf, yf=None, out=print) -> pd.DataFrame:
     import yfinance as _yf
     yf = yf or _yf
@@ -130,16 +147,27 @@ def pick(conf, yf=None, out=print) -> pd.DataFrame:
 
     mom = momentum_table(close, volume, m)
     out(f"In an uptrend with enough trading volume: {len(mom)}")
+    cap = m.getfloat("max_above_200d_pct") / 100
+    stretched = mom["vs_200d"] > cap if len(mom) else pd.Series(dtype=bool)
+    if stretched.any():
+        out(f"Skipped {int(stretched.sum())} already more than {cap:.0%} above their 200-day average "
+            f"(e.g. {', '.join(mom.loc[stretched, 'symbol'].head(5))})")
+        mom = mom[~stretched]
+    if mom.empty:
+        out("\nNo stock passes the screen today. Nothing to rank.")
+        return mom
     short = add_fundamentals(mom.head(m.getint("shortlist")), yf)
     short = short.merge(uni[["symbol", "name", "market_cap"]], on="symbol", how="left")
     short["name"] = short["long_name"].fillna(short["name"])
     short = short[short["rev_growth"].isna() | (short["rev_growth"] > 0)]
 
     growth_rank = short["rev_growth"].rank(pct=True).fillna(0.5)
-    short["score"] = short["mom_score"].rank(pct=True) * 0.6 + growth_rank * 0.4
+    calm_rank = 1 - short["vs_200d"].rank(pct=True)      # less stretched above the 200-day = better
+    short["score"] = short["mom_score"].rank(pct=True) * 0.5 + growth_rank * 0.3 + calm_rank * 0.2
     short = short.sort_values("score", ascending=False).reset_index(drop=True)
 
-    top = short.head(o.getint("top_n"))
+    top = pick_diversified(short, o.getint("top_n"), o.getint("max_per_industry"))
+    short["picked"] = short["symbol"].isin(top["symbol"])
     out(f"\nTOP {len(top)} MID-CAP GROWTH MOMENTUM NAMES ({date.today()})")
     for n, (_, r) in enumerate(top.iterrows(), 1):
         out(f"{n}. {thesis(r)}")
