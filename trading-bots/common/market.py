@@ -19,8 +19,9 @@ def parse_hhmm(text: str) -> time:
 def in_run_window(start: str, end: str, now: datetime | None = None) -> bool:
     """True when New York time is inside [start, end].
 
-    The cloud scheduler fires at two UTC times so one of them is 9:30 ET in both
-    summer and winter. This check makes the other one exit quietly.
+    The cloud scheduler fires at two UTC times, an hour apart, so one of them
+    is near the open in both summer and winter. Runs outside the window (e.g.
+    8:35 ET in winter) exit quietly.
     """
     now = now or now_ny()
     return parse_hhmm(start) <= now.time() <= parse_hhmm(end)
