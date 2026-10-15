@@ -256,9 +256,12 @@ class FakeYF:
     def download(self, syms, **k):
         return pd.concat({"Close": self.close[syms], "Volume": self.vol[syms]}, axis=1)
 
+    industries = ("Software", "Semiconductors", "Biotechnology")
+
     def Ticker(self, s):
         g = 0.10 + 0.02 * int(s[3:])
-        return SimpleNamespace(info={"revenueGrowth": g, "earningsGrowth": g * 1.5, "industry": "Software",
+        return SimpleNamespace(info={"revenueGrowth": g, "earningsGrowth": g * 1.5,
+                                     "industry": self.industries[int(s[3:]) % len(self.industries)],
                                      "sector": "Technology", "shortName": f"{s} Inc."})
 
 
@@ -274,6 +277,25 @@ def test_picker_returns_top3_with_thesis(tmp_path):
     t = thesis(top.iloc[0])
     assert "revenue up" in t and "above the 200-day" in t
     assert any("not investment advice" in l for l in lines)
+    assert top["industry"].nunique() == 3                            # one per industry
+
+
+def test_picker_caps_each_industry():
+    from stock_picker.picker import pick_diversified
+    ranked = pd.DataFrame({"symbol": ["ECO", "INSW", "IOVA", "STNG", "XYZ"],
+                           "industry": ["Shipping", "Shipping", "Biotech", "Shipping", ""]})
+    assert list(pick_diversified(ranked, 3, 1)["symbol"]) == ["ECO", "IOVA", "XYZ"]
+    assert list(pick_diversified(ranked, 3, 2)["symbol"]) == ["ECO", "INSW", "IOVA"]
+
+
+def test_picker_skips_stretched_names(tmp_path):
+    from stock_picker.picker import pick
+    c = load_conf("stock_picker/picker.conf")
+    c["output"]["report_dir"] = str(tmp_path)
+    c["momentum"]["max_above_200d_pct"] = "0"                        # everything in an uptrend is "stretched"
+    lines = []
+    top = pick(c, yf=FakeYF(), out=lines.append)
+    assert top.empty and any(l.startswith("Skipped ") for l in lines)
 
 
 def test_live_run_skips_programs_with_zero_weight(px, conf):
