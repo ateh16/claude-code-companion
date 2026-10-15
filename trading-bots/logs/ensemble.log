@@ -1,3 +1,16 @@
 2026-10-15 00:48:33 ET | INFO    | === Ensemble run start ===
 2026-10-15 00:48:33 ET | INFO    | Account: PAPER
 2026-10-15 00:48:33 ET | INFO    | Market is closed today. No trades.
+2026-10-15 10:04:47 ET | INFO    | === Ensemble run start ===
+2026-10-15 10:04:47 ET | INFO    | Account: PAPER
+2026-10-15 10:04:47 ET | INFO    | SPY: downloading full history since 2000-01-01
+2026-10-15 10:04:48 ET | INFO    | QQQ: downloading full history since 2000-01-01
+2026-10-15 10:04:48 ET | INFO    | EFA: downloading full history since 2000-01-01
+2026-10-15 10:04:49 ET | INFO    | IEF: downloading full history since 2000-01-01
+2026-10-15 10:04:49 ET | INFO    | Prices through 2026-10-14 (6092 days of history)
+2026-10-15 10:04:49 ET | INFO    | Vote p1_trend     weight 60% -> QQQ 100%
+2026-10-15 10:04:49 ET | INFO    | Vote p2_momentum  weight 40% -> SPY 100%
+2026-10-15 10:04:49 ET | INFO    | TARGET: SPY 40.0%, QQQ 60.0%, EFA 0.0%, IEF 0.0% | cash 0%
+2026-10-15 10:04:49 ET | INFO    | Account equity $100,000.00 | ensemble budget $100,000.00 | holding: nothing
+2026-10-15 10:04:49 ET | INFO    | ORDER PLACED: BUY SPY ~$40,000.00 | id a5b37ba9-c593-4de6-bd9c-1c69b8845041
+2026-10-15 10:04:50 ET | INFO    | ORDER PLACED: BUY QQQ ~$60,000.00 | id af3649ca-cfff-4f58-8227-7c8414458f6f
