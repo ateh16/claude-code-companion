@@ -147,6 +147,8 @@ def test_bot_respects_window_and_holidays(monkeypatch):
     import ma_crossover.bot as bot
     _patch_download(monkeypatch, crossing_series())
     assert bot.run(broker=FakeBroker(), now=MORNING.replace(hour=8, minute=30)) == "skipped-window"
+    assert bot.run(broker=FakeBroker(), now=MORNING.replace(hour=14, minute=5)) == "skipped-window"
+    assert bot.run(broker=FakeBroker(), now=MORNING.replace(hour=11, minute=5)) != "skipped-window"  # GitHub ran late
     assert bot.run(broker=FakeBroker(is_open=False), now=MORNING) == "skipped-closed"
 
 

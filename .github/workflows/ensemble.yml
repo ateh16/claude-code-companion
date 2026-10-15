@@ -2,8 +2,8 @@ name: Ensemble bot
 
 on:
   schedule:
-    - cron: "30 13 * * 1-5"   # 9:30 ET in summer (EDT)
-    - cron: "30 14 * * 1-5"   # 9:30 ET in winter (EST)
+    - cron: "35 13 * * 1-5"   # 9:35 ET in summer (EDT)
+    - cron: "35 14 * * 1-5"   # 9:35 ET in winter (EST)
   workflow_dispatch:
 
 permissions:

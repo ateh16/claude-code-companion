@@ -11,7 +11,7 @@ Three tools that share one setup (`common/`):
 
 All commands run from this `trading-bots/` folder. Both bots accept
 `--dry-run` (show the signal, place no order) and `--force` (ignore the
-9:25–10:25 ET run window).
+9:25 AM–2:00 PM ET run window).
 
 ## Install
 
