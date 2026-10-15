@@ -156,16 +156,20 @@ def p4_contrarian(px, a, c, retrain_every=21, last_only=False, prob=None):
 
 # ---------------------------------------------------------------- Blend
 def all_votes(px, conf, live=False):
-    """live=True: Program 4 trains once on everything and votes for today only.
-    live=False (backtest): walk-forward, retraining every `backtest_retrain_every` days."""
+    """live=True: Program 4 trains once on everything and votes for today only, and
+    programs with a weight of 0 are skipped (they can't change the target).
+    live=False (backtest): every program runs, so each can be reported on its own;
+    Program 4 is walk-forward, retraining every `backtest_retrain_every` days."""
     a = conf["assets"]
-    votes = {
-        "p1_trend": p1_trend(px, a, conf["p1_trend"]),
-        "p2_momentum": p2_momentum(px, a, conf["p2_momentum"]),
-        "p3_dip": p3_dip(px, a, conf["p3_dip"]),
-    }
-    every = conf.getint("p4_ml", "backtest_retrain_every")
-    votes["p4_ml"], prob = p4_contrarian(px, a, conf["p4_ml"], every, last_only=live)
+    used = lambda k: not live or conf.getfloat("weights", k) > 0
+    votes = {}
+    for name, fn in (("p1_trend", p1_trend), ("p2_momentum", p2_momentum), ("p3_dip", p3_dip)):
+        if used(name):
+            votes[name] = fn(px, a, conf[name])
+    prob = pd.Series(np.nan, index=px.index)
+    if used("p4_ml"):
+        every = conf.getint("p4_ml", "backtest_retrain_every")
+        votes["p4_ml"], prob = p4_contrarian(px, a, conf["p4_ml"], every, last_only=live)
     return votes, prob
 
 

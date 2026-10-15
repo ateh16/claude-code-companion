@@ -272,3 +272,14 @@ def test_picker_returns_top3_with_thesis(tmp_path):
     t = thesis(top.iloc[0])
     assert "revenue up" in t and "above the 200-day" in t
     assert any("not investment advice" in l for l in lines)
+
+
+def test_live_run_skips_programs_with_zero_weight(px, conf):
+    from ensemble.programs import all_votes, blend
+    c = configparser.ConfigParser(inline_comment_prefixes=("#", ";"))
+    c.read_dict(conf)
+    c["weights"].update({"p1_trend": "0.6", "p2_momentum": "0.4", "p3_dip": "0", "p4_ml": "0"})
+    votes, prob = all_votes(px, c, live=True)
+    assert set(votes) == {"p1_trend", "p2_momentum"} and prob.isna().all()   # model not trained
+    assert abs(blend(votes, c).iloc[-1].sum()) <= 1 + 1e-9
+    assert set(all_votes(px.iloc[-1500:], c, live=False)[0]) == {"p1_trend", "p2_momentum", "p3_dip", "p4_ml"}

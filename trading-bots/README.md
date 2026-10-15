@@ -20,7 +20,7 @@ cd trading-bots
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env      # then paste your Alpaca PAPER keys
-python -m pytest -q tests # 14 offline tests, no internet needed
+python -m pytest -q tests # 15 offline tests, no internet needed
 ```
 
 ## First things to run
