@@ -5,14 +5,16 @@
      price above its 50-day average and the 50-day above the 200-day.
   3. Fundamentals check on the strongest names (revenue and earnings growth).
   4. Rank on momentum + growth, marking down names that have run far above
-     their 200-day average, and print the top 3 (at most one per industry)
-     with a one-line thesis.
+     their 200-day average, and print the top 3 with a one-line thesis.
+     The top 3 holds at most one name per industry, and no two names whose
+     daily moves are closely correlated.
 
 This is a screen, not advice: it ranks what the numbers show today.
 
 Run:  python -m stock_picker.picker
 """
 import argparse
+import threading
 from datetime import date
 from pathlib import Path
 
@@ -92,19 +94,41 @@ def momentum_table(close: pd.DataFrame, volume: pd.DataFrame, m) -> pd.DataFrame
 
 
 # ------------------------------------------------------------ 3. fundamentals
-def add_fundamentals(t: pd.DataFrame, yf=None) -> pd.DataFrame:
+def _info_with_timeout(yf, sym, timeout):
+    """Yahoo's .info lookup, abandoned after `timeout` seconds so one slow or
+    throttled request can't freeze the run (the thread is left to finish alone)."""
+    box = {}
+
+    def fetch():
+        try:
+            box["info"] = yf.Ticker(sym).info or {}
+        except Exception:
+            pass
+
+    th = threading.Thread(target=fetch, daemon=True)
+    th.start()
+    th.join(timeout)
+    return box.get("info", {})
+
+
+def add_fundamentals(t: pd.DataFrame, yf=None, timeout=20.0, out=None) -> pd.DataFrame:
     import yfinance as _yf
     yf = yf or _yf
-    info_rows = []
-    for sym in t["symbol"]:
-        try:
-            i = yf.Ticker(sym).info or {}
-        except Exception:
-            i = {}
+    info_rows, missed = [], []
+    syms = list(t["symbol"])
+    for n, sym in enumerate(syms, 1):
+        if out and (n == 1 or n % 10 == 0 or n == len(syms)):
+            out(f"Checking fundamentals {n}/{len(syms)}...")
+        i = _info_with_timeout(yf, sym, timeout)
+        if not i:
+            missed.append(sym)
         info_rows.append({"symbol": sym, "rev_growth": i.get("revenueGrowth"),
                           "eps_growth": i.get("earningsGrowth"),
                           "sector": i.get("sector") or "", "industry": i.get("industry") or "",
                           "long_name": i.get("shortName") or i.get("longName")})
+    if out and missed:
+        out(f"No fundamentals from Yahoo for {len(missed)}: {', '.join(missed[:8])}"
+            f"{' ...' if len(missed) > 8 else ''} (ranked on momentum only)")
     return t.merge(pd.DataFrame(info_rows), on="symbol", how="left")
 
 
@@ -117,16 +141,28 @@ def thesis(r) -> str:
             f"and {r['vs_200d']:.0%} above the 200-day average.")
 
 
-def pick_diversified(ranked: pd.DataFrame, n: int, max_per_industry: int) -> pd.DataFrame:
-    """Best-scored names in order, skipping any whose industry is already full.
+def pick_diversified(ranked: pd.DataFrame, n: int, max_per_industry: int,
+                     returns: pd.DataFrame | None = None, max_corr: float = 1.0,
+                     out=None) -> pd.DataFrame:
+    """Best-scored names in order, skipping any whose industry is already full or
+    whose daily returns correlate above `max_corr` with a name already picked.
     A name with no industry on file counts as its own industry."""
-    taken, rows = {}, []
+    taken, rows, picked = {}, [], []
     for i, r in ranked.iterrows():
-        key = r.get("industry") or r["symbol"]
+        sym = r["symbol"]
+        key = r.get("industry") or sym
         if taken.get(key, 0) >= max_per_industry:
             continue
+        if returns is not None and sym in returns:
+            twins = [p for p in picked if p in returns and returns[sym].corr(returns[p]) > max_corr]
+            if twins:
+                if out:
+                    out(f"Skipped {sym}: moves too closely with {twins[0]} "
+                        f"(correlation {returns[sym].corr(returns[twins[0]]):.2f})")
+                continue
         taken[key] = taken.get(key, 0) + 1
         rows.append(i)
+        picked.append(sym)
         if len(rows) == n:
             break
     return ranked.loc[rows]
@@ -156,7 +192,8 @@ def pick(conf, yf=None, out=print) -> pd.DataFrame:
     if mom.empty:
         out("\nNo stock passes the screen today. Nothing to rank.")
         return mom
-    short = add_fundamentals(mom.head(m.getint("shortlist")), yf)
+    short = add_fundamentals(mom.head(m.getint("shortlist")), yf,
+                             timeout=m.getfloat("info_timeout_sec"), out=out)
     short = short.merge(uni[["symbol", "name", "market_cap"]], on="symbol", how="left")
     short["name"] = short["long_name"].fillna(short["name"])
     short = short[short["rev_growth"].isna() | (short["rev_growth"] > 0)]
@@ -166,7 +203,9 @@ def pick(conf, yf=None, out=print) -> pd.DataFrame:
     short["score"] = short["mom_score"].rank(pct=True) * 0.5 + growth_rank * 0.3 + calm_rank * 0.2
     short = short.sort_values("score", ascending=False).reset_index(drop=True)
 
-    top = pick_diversified(short, o.getint("top_n"), o.getint("max_per_industry"))
+    rets = close.pct_change(fill_method=None).tail(o.getint("correlation_days"))
+    top = pick_diversified(short, o.getint("top_n"), o.getint("max_per_industry"),
+                           rets, o.getfloat("max_correlation"), out)
     short["picked"] = short["symbol"].isin(top["symbol"])
     out(f"\nTOP {len(top)} MID-CAP GROWTH MOMENTUM NAMES ({date.today()})")
     for n, (_, r) in enumerate(top.iterrows(), 1):

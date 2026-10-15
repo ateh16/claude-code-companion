@@ -307,3 +307,35 @@ def test_live_run_skips_programs_with_zero_weight(px, conf):
     assert set(votes) == {"p1_trend", "p2_momentum"} and prob.isna().all()   # model not trained
     assert abs(blend(votes, c).iloc[-1].sum()) <= 1 + 1e-9
     assert set(all_votes(px.iloc[-1500:], c, live=False)[0]) == {"p1_trend", "p2_momentum", "p3_dip", "p4_ml"}
+
+
+def test_picker_skips_names_that_move_together():
+    """Two tanker stocks under different Yahoo labels: correlation catches them."""
+    from stock_picker.picker import pick_diversified
+    rng = np.random.default_rng(5)
+    oil = rng.normal(0, 0.02, 126)
+    rets = pd.DataFrame({"ECO": oil + rng.normal(0, 0.005, 126), "INSW": oil + rng.normal(0, 0.005, 126),
+                         "XMTR": rng.normal(0, 0.02, 126), "ABC": rng.normal(0, 0.02, 126)})
+    ranked = pd.DataFrame({"symbol": ["ECO", "INSW", "XMTR", "ABC"],
+                           "industry": ["Marine Shipping", "Oil & Gas Midstream", "Industrial Distribution", "Software"]})
+    lines = []
+    top = pick_diversified(ranked, 3, 1, rets, 0.7, out=lines.append)
+    assert list(top["symbol"]) == ["ECO", "XMTR", "ABC"]
+    assert any("INSW" in l and "ECO" in l for l in lines)
+
+
+def test_picker_gives_up_on_a_stalled_lookup():
+    import time
+    from stock_picker.picker import add_fundamentals
+
+    class SlowYF(FakeYF):
+        def Ticker(self, s):
+            if s == "MID1":
+                time.sleep(5)                                # Yahoo throttling this one
+            return super().Ticker(s)
+
+    lines, t0 = [], time.time()
+    df = add_fundamentals(pd.DataFrame({"symbol": ["MID0", "MID1", "MID2"]}), SlowYF(), timeout=0.5, out=lines.append)
+    assert time.time() - t0 < 3
+    assert df.set_index("symbol")["rev_growth"].isna().tolist() == [False, True, False]
+    assert any("Checking fundamentals 1/3" in l for l in lines) and any("MID1" in l for l in lines)
