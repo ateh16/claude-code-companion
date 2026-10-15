@@ -14,3 +14,5 @@
 2026-10-15 10:04:49 ET | INFO    | Account equity $100,000.00 | ensemble budget $100,000.00 | holding: nothing
 2026-10-15 10:04:49 ET | INFO    | ORDER PLACED: BUY SPY ~$40,000.00 | id a5b37ba9-c593-4de6-bd9c-1c69b8845041
 2026-10-15 10:04:50 ET | INFO    | ORDER PLACED: BUY QQQ ~$60,000.00 | id af3649ca-cfff-4f58-8227-7c8414458f6f
+2026-10-15 11:05:14 ET | INFO    | === Ensemble run start ===
+2026-10-15 11:05:14 ET | INFO    | Outside the run window (11:05 ET). Nothing to do.
