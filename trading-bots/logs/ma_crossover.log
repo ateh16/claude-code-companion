@@ -32,3 +32,7 @@
 2026-10-21 10:12:46 ET | INFO    | Account: PAPER
 2026-10-21 10:12:47 ET | INFO    | Data through 2026-10-20 | close 339.50 | 20-day MA 337.61 (was 337.62) | 50-day MA 326.92 (was 326.29)
 2026-10-21 10:12:47 ET | INFO    | No crossover. Short MA stays above long MA. No trade.
+2026-10-21 11:05:45 ET | INFO    | === Run start: AAPL 20/50-day crossover, 1 share(s) ===
+2026-10-21 11:05:45 ET | INFO    | Account: PAPER
+2026-10-21 11:05:45 ET | INFO    | Data through 2026-10-20 | close 339.50 | 20-day MA 337.61 (was 337.62) | 50-day MA 326.92 (was 326.29)
+2026-10-21 11:05:45 ET | INFO    | No crossover. Short MA stays above long MA. No trade.
