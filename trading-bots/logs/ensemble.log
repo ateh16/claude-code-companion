@@ -104,3 +104,15 @@
 2026-10-22 11:08:29 ET | INFO    | TARGET: SPY 40.0%, QQQ 60.0%, EFA 0.0%, IEF 0.0% | cash 0%
 2026-10-22 11:08:29 ET | INFO    | Account equity $98,795.59 | ensemble budget $98,795.59 | holding: QQQ $59,010, SPY $39,786
 2026-10-22 11:08:29 ET | INFO    | Account already matches the target. No trades.
+2026-10-23 10:09:09 ET | INFO    | === Ensemble run start ===
+2026-10-23 10:09:09 ET | INFO    | Account: PAPER
+2026-10-23 10:09:10 ET | INFO    | SPY: +2 new day(s) from cache update
+2026-10-23 10:09:10 ET | INFO    | QQQ: +2 new day(s) from cache update
+2026-10-23 10:09:10 ET | INFO    | EFA: +2 new day(s) from cache update
+2026-10-23 10:09:10 ET | INFO    | IEF: +2 new day(s) from cache update
+2026-10-23 10:09:10 ET | INFO    | Prices through 2026-10-22 (6098 days of history)
+2026-10-23 10:09:10 ET | INFO    | Vote p1_trend     weight 60% -> QQQ 100%
+2026-10-23 10:09:10 ET | INFO    | Vote p2_momentum  weight 40% -> SPY 100%
+2026-10-23 10:09:10 ET | INFO    | TARGET: SPY 40.0%, QQQ 60.0%, EFA 0.0%, IEF 0.0% | cash 0%
+2026-10-23 10:09:11 ET | INFO    | Account equity $98,520.34 | ensemble budget $98,520.34 | holding: QQQ $58,847, SPY $39,674
+2026-10-23 10:09:11 ET | INFO    | Account already matches the target. No trades.
