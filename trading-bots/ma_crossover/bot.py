@@ -10,7 +10,7 @@ Each weekday morning at the open:
 
 Run:  python -m ma_crossover.bot            (normal, scheduled run)
       python -m ma_crossover.bot --dry-run  (no orders, just show the signal)
-      python -m ma_crossover.bot --force    (ignore the 9:25-14:00 ET window)
+      python -m ma_crossover.bot --force    (ignore the 9:25-15:45 ET window)
 """
 import argparse
 import math
