@@ -2,19 +2,22 @@ name: MA crossover bot
 
 on:
   schedule:
-    # GitHub runs schedules in UTC: 13:35 UTC is 9:35 ET in summer (EDT),
-    # 14:35 UTC is 9:35 ET in winter (EST). Minute 35 avoids the :00/:30 rush
-    # that delays scheduled runs. The bot's 9:25-14:00 ET window skips a run
-    # that lands before the open; a second run on the same day trades nothing new.
-    - cron: "35 13 * * 1-5"
-    - cron: "35 14 * * 1-5"
+    # GitHub runs schedules in UTC and often starts them late (on 2026-10-26 by
+    # six hours) or not at all, so there are four tries a day. Minute 35 avoids
+    # the :00/:30 rush. ET times, summer (EDT) / winter (EST):
+    - cron: "35 13 * * 1-5"   #  9:35 AM / 8:35 AM (winter: before the window, exits)
+    - cron: "35 14 * * 1-5"   # 10:35 AM / 9:35 AM
+    - cron: "35 16 * * 1-5"   # 12:35 PM / 11:35 AM  (backup)
+    - cron: "35 18 * * 1-5"   #  2:35 PM / 1:35 PM   (backup)
+    # The bot trades only 9:25 AM-3:45 PM ET; later runs of the same day find
+    # nothing to do.
   workflow_dispatch:        # "Run workflow" button for a manual test
 
 permissions:
   contents: write           # lets the job save its log back to the repo
 
 concurrency:
-  group: trading-bots       # never two bots pushing logs at the same moment
+  group: ${{ github.workflow }}   # one run of each bot at a time; the bots don't block each other
   cancel-in-progress: false
 
 defaults:
@@ -48,4 +51,5 @@ jobs:
           git config user.email "trading-bot@users.noreply.github.com"
           git add logs/
           git diff --cached --quiet || git commit -m "MA crossover log $(date -u +%F)"
-          git pull --rebase --autostash && git push
+          # the other bot may push its log at the same moment: retry a few times
+          for i in 1 2 3 4; do git pull --rebase --autostash && git push && break; sleep $((i * 5)); done; git push   # red run if the log still is not saved
