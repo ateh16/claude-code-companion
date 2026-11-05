@@ -200,3 +200,15 @@
 2026-11-04 17:09:34 ET | INFO    | Outside the run window (17:09 ET). Nothing to do.
 2026-11-04 18:53:52 ET | INFO    | === Ensemble run start ===
 2026-11-04 18:53:52 ET | INFO    | Outside the run window (18:53 ET). Nothing to do.
+2026-11-05 12:23:42 ET | INFO    | === Ensemble run start ===
+2026-11-05 12:23:42 ET | INFO    | Account: PAPER
+2026-11-05 12:23:43 ET | INFO    | SPY: +2 new day(s) from cache update
+2026-11-05 12:23:43 ET | INFO    | QQQ: +2 new day(s) from cache update
+2026-11-05 12:23:43 ET | INFO    | EFA: +2 new day(s) from cache update
+2026-11-05 12:23:44 ET | INFO    | IEF: +2 new day(s) from cache update
+2026-11-05 12:23:44 ET | INFO    | Prices through 2026-11-04 (6107 days of history)
+2026-11-05 12:23:44 ET | INFO    | Vote p1_trend     weight 60% -> QQQ 87%
+2026-11-05 12:23:44 ET | INFO    | Vote p2_momentum  weight 40% -> EFA 100%
+2026-11-05 12:23:44 ET | INFO    | TARGET: SPY 0.0%, QQQ 52.1%, EFA 40.0%, IEF 0.0% | cash 8%
+2026-11-05 12:23:44 ET | INFO    | Account equity $94,484.72 | ensemble budget $94,484.72 | holding: EFA $38,803, QQQ $49,569
+2026-11-05 12:23:44 ET | INFO    | ORDER PLACED: SELL EFA ~$1,009.59 | id 7e6285eb-db46-4a9c-a0e1-4fa9bde04bce
