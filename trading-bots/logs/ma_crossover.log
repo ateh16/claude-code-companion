@@ -152,3 +152,5 @@
 2026-11-10 15:34:50 ET | INFO    | No crossover. Short MA stays above long MA. No trade.
 2026-11-10 15:57:58 ET | INFO    | === Run start: AAPL 20/50-day crossover, 1 share(s) ===
 2026-11-10 15:57:58 ET | INFO    | Outside the run window (15:57 ET). Nothing to do.
+2026-11-10 16:55:15 ET | INFO    | === Run start: AAPL 20/50-day crossover, 1 share(s) ===
+2026-11-10 16:55:15 ET | INFO    | Outside the run window (16:55 ET). Nothing to do.
