@@ -310,3 +310,5 @@
 2026-11-11 15:17:43 ET | INFO    | TARGET: SPY 0.0%, QQQ 0.0%, EFA 40.0%, IEF 0.0% | cash 60%
 2026-11-11 15:17:43 ET | INFO    | Account equity $95,194.32 | ensemble budget $95,194.32 | holding: EFA $38,205
 2026-11-11 15:17:43 ET | INFO    | Account already matches the target. No trades.
+2026-11-11 16:30:54 ET | INFO    | === Ensemble run start ===
+2026-11-11 16:30:54 ET | INFO    | Outside the run window (16:30 ET). Nothing to do.
