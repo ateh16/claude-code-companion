@@ -324,3 +324,5 @@
 2026-11-12 12:24:25 ET | INFO    | TARGET: SPY 0.0%, QQQ 32.6%, EFA 40.0%, IEF 0.0% | cash 27%
 2026-11-12 12:24:25 ET | INFO    | Account equity $95,042.88 | ensemble budget $95,042.88 | holding: EFA $38,053
 2026-11-12 12:24:25 ET | INFO    | ORDER PLACED: BUY QQQ ~$30,972.42 | id 3fc5d955-58bd-4beb-a8de-0abcf5f509e0
+2026-11-12 16:00:28 ET | INFO    | === Ensemble run start ===
+2026-11-12 16:00:28 ET | INFO    | Outside the run window (16:00 ET). Nothing to do.
