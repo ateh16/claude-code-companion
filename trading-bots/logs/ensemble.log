@@ -442,3 +442,5 @@
 2026-11-20 12:24:04 ET | INFO    | TARGET: SPY 0.0%, QQQ 0.0%, EFA 40.0%, IEF 0.0% | cash 60%
 2026-11-20 12:24:04 ET | INFO    | Account equity $91,236.04 | ensemble budget $91,236.04 | holding: EFA $35,345
 2026-11-20 12:24:04 ET | INFO    | ORDER PLACED: BUY EFA ~$1,148.93 | id 22c71438-903f-4b14-af9d-2370993fc694
+2026-11-20 16:25:58 ET | INFO    | === Ensemble run start ===
+2026-11-20 16:25:58 ET | INFO    | Outside the run window (16:25 ET). Nothing to do.
