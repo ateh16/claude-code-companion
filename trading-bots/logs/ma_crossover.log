@@ -288,3 +288,6 @@
 2026-11-25 19:37:39 ET | INFO    | Outside the run window (19:37 ET). Nothing to do.
 2026-11-25 20:55:50 ET | INFO    | === Run start: AAPL 20/50-day crossover, 1 share(s) ===
 2026-11-25 20:55:50 ET | INFO    | Outside the run window (20:55 ET). Nothing to do.
+2026-11-26 12:23:36 ET | INFO    | === Run start: AAPL 20/50-day crossover, 1 share(s) ===
+2026-11-26 12:23:36 ET | INFO    | Account: PAPER
+2026-11-26 12:23:36 ET | INFO    | Market is closed today (weekend or holiday). No trade.
